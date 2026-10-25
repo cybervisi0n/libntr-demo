@@ -31,12 +31,7 @@ done
 if [ "$(docker images -q $IMAGENAME)" == "" ]
 then
     echo "Building container image $IMAGENAME"
-    if [ -z "${GITHUB_ACTIONS}" ]; then
-        docker build -t $IMAGENAME -f $DOCKERFILENAME .
-    else
-        # DevkitPro does not install in GitHub actions
-        docker build -t $IMAGENAME -f $DOCKERFILENAME --build-arg USE_DEVKITPRO=0 .
-    fi
+    docker build -t $IMAGENAME -f $DOCKERFILENAME .
 fi
 
 mkdir -p ./.fontconfig_cache
@@ -47,21 +42,20 @@ CWD=$(pwd)
 if [ $INTERACTIVE -eq 1 ]; then
 docker run -it --user $(id -u):$(id -g) \
            --env DISPLAY=$DISPLAY \
-           --env DEVKITPRO=/opt/devkitpro \
            --env GITHUB_ACTIONS=$GITHUB_ACTIONS \
            -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
            --privileged \
            --device /dev/fuse \
            --cap-add SYS_ADMIN \
            --mount type=bind,src=./,target=$CWD \
-           $IMAGENAME
+           $IMAGENAME \
+           bash -c "cd $CWD && source ./scripts/env_vars.sh && bash"
 exit 0
 fi
 
 # Run command in container
 docker run --user $(id -u):$(id -g) \
            --env DISPLAY=$DISPLAY \
-           --env DEVKITPRO=/opt/devkitpro \
            --env GITHUB_ACTIONS=$GITHUB_ACTIONS \
            -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
            --privileged \
@@ -69,5 +63,5 @@ docker run --user $(id -u):$(id -g) \
            --cap-add SYS_ADMIN \
            -i \
            --mount type=bind,src=./,target=$CWD \
-           $IMAGENAME sh -c "cd $CWD && $COMMAND"
+           $IMAGENAME bash -c "cd $CWD && source ./scripts/env_vars.sh &&  $COMMAND"
 
