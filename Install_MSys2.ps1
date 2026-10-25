@@ -14,4 +14,4 @@ Remove-Item .\msys2-installer.exe
 # Setup MSYS2
 $msys2pwd=.\msys2\usr\bin\bash.exe -c "pwd"
 .\msys2\usr\bin\bash.exe -l -c "pacman -Syu --noconfirm"
-.\msys2\usr\bin\bash.exe -l -c "$msys2pwd/tools/scripts/setup_msys2.sh $msys2pwd"
+.\msys2\usr\bin\bash.exe -l -c "$msys2pwd/scripts/setup_msys2.sh $msys2pwd"
