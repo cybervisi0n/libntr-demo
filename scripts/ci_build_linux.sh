@@ -1,3 +1,3 @@
 #!/bin/bash
-./setup_build_linux.sh
+./setup_build.sh linux
 meson compile -C build_linux
