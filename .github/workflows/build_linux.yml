@@ -1,0 +1,40 @@
+name: build_linux
+
+on:
+  push:
+    branches: [ master ]
+    paths-ignore:
+      - '**.md'
+  pull_request:
+    paths-ignore:
+      - '**.md'
+  workflow_dispatch:
+
+jobs:
+  build_linux:
+    permissions:
+      contents: write
+    runs-on: ubuntu-26.04
+    steps:
+      - name: Install Software
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y --no-install-recommends fuse git python3 wget zip
+
+      - name: Checkout Repo
+        uses: actions/checkout@v6
+
+      - name: Create build container image
+        run: ./drun.sh echo done
+
+      - name: Build (Linux)
+        run: ./drun.sh ./scripts/ci_build_linux.sh
+
+      - name: Package release artifact (linux)
+        run: ./scripts/package_artifacts_linux.sh
+
+      - name: Upload release artifact (linux)
+        uses: actions/upload-artifact@v6
+        with:
+          name: libntr-demo_linux
+          path: build_linux/libntr-demo_linux
