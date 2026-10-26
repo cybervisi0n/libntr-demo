@@ -44,6 +44,7 @@ endif
 ###                      LINK ARGS                       ###
 ############################################################
 project_link_args = []
+project_libs = []
 if(build_target == 'arm')
     project_link_args += [
         'spec/main.lcf'
@@ -58,6 +59,8 @@ project_link_args += [
     '-Wl,--version-script=' + meson.global_source_root() + '/' + 'prospero/ps5-app-symbols.map',
     '-pthread'
 ]
+
+project_libs += prospero_crt_lib
 endif
 
 ############################################################
@@ -70,6 +73,7 @@ main_exe = executable('main',
     include_directories: project_includes,
     dependencies: project_deps,
     link_args: project_link_args,
+    link_with: project_libs,
     native: (build_target == 'linux' or build_target == 'win64')
 )
 
