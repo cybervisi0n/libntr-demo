@@ -1,4 +1,4 @@
-name: build_linux
+name: build_prospero
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_linux:
+  build_prospero:
     permissions:
       contents: write
     runs-on: ubuntu-26.04
