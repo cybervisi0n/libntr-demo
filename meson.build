@@ -141,7 +141,7 @@ libc_prx = custom_target(
 
 # Build the app folder
 build_app_folder_sh = files('scripts/build_ps5_folder.sh')
-sce_sys_source = meson.project_source_root() + '/sce_sys'
+sce_sys_source = meson.project_source_root() + '/prospero/sce_sys'
 app_folder = custom_target(
     'PPSA94600',
     output: 'PPSA94600',
